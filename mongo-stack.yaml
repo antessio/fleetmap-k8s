@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template: 
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:3.6.23
+        volumeMounts:
+          - name: mongo-persistence-storage
+            mountPath: /data/db
+      volumes:
+        - name: mongo-persistence-storage
+          persistenceVolumeClaim:
+            claimName: mongo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-mongodb
+spec:
+  # this defines which pods are going to be represented by this Service
+  # The services becomes a network endpoint for either other services
+  # or maybe external users to connect to (eg browser)
+  selector:
+    app: mongodb
+
+  ports:
+    - name: mongo-port
+      port: 27017
+
+  type: ClusterIP
