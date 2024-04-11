@@ -20,8 +20,8 @@ spec:
             mountPath: /data/db
       volumes:
         - name: mongo-persistence-storage
-          persistenceVolumeClaim:
-            claimName: mongo-pvc
+      persistenceVolumeClaim:
+        claimName: mongo-pvc
 ---
 apiVersion: v1
 kind: Service
