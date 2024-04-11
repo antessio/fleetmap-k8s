@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
 spec:
-  storageClassName: mylocalstorage
+  storageClassName: cloud-sdd
   accessModes:
     - ReadWriteOnce
   resources:
@@ -11,13 +11,10 @@ spec:
       storage: 10Gi
     
 ---
-apiVersion: v1
-kind: PersistentVolume
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
-  name: local-storage
-spec:
-  storageClassName: mylocalstorage
-  capacity:
-    storage: 20Gi
-  hostPath: 
-    path: /Users/antoniodalessio/personal/udemy-kubernates/persistence-12/data
+  name: cloud-sdd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
